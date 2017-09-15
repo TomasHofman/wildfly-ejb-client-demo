@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ejb-client-demo-parent</artifactId>
+        <groupId>org.jboss.thofman.ejb-client-demo</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>client-parent</artifactId>
+    <packaging>pom</packaging>
+
+    <name>EJB Client Demo - clients parent</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>client-common</module>
+        <module>client-outbound-connection</module>
+        <module>client-scoped-ejb-context</module>
+        <module>client-remote-naming</module>
+    </modules>
+
+    <dependencies>
+        <!-- Java EE Web API for servlets -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- EJB client BOM for EJB client dependencies -->
+        <dependency>
+            <groupId>org.jboss.eap</groupId>
+            <artifactId>wildfly-ejb-client-bom</artifactId>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                
+                <!-- exec plugin for running standalone clients -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>java</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <classpathScope>test</classpathScope>
+                        <arguments>
+                            <argument>1</argument>
+                            <argument>1</argument>
+                        </arguments>
+                        <systemProperties>
+                            <systemProperty>
+                                <key>javax.net.ssl.trustStore</key>
+                                <value>/home/thofman/Projects/jboss-eap-7.0.x/dist/target/jboss-eap-7.0.7.GA-redhat-SNAPSHOT/domain/configuration/ssl/server.truststore</value>
+                            </systemProperty>
+                            <systemProperty>
+                                <key>org.slf4j.simpleLogger.defaultLogLevel</key>
+                                <value>warn</value>
+                            </systemProperty>
+                        </systemProperties>
+                    </configuration>
+                </plugin>
+                
+                <!-- war plugin for building deployments with servlets -->
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Dependencies>org.jboss.remote-naming,org.jboss.xnio,org.jboss.remoting</Dependencies>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

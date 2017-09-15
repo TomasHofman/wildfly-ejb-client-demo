@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+        http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jboss.thofman.ejb-client-demo</groupId>
+        <artifactId>client-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>client-remote-naming</artifactId>
+    <packaging>war</packaging>
+    <name>Client using remote-naming API</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.thofman.ejb-client-demo</groupId>
+            <artifactId>client-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- rewrite libraries versions -->
+        <!--<dependency>
+            <groupId>org.jboss.remoting</groupId>
+            <artifactId>jboss-remoting</artifactId>
+            <version>4.0.25.Final-SNAPSHOT</version>
+        </dependency>-->
+        <!--<dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-nio</artifactId>
+            <version>3.4.7.Final-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-api</artifactId>
+            <version>3.4.7.Final-SNAPSHOT</version>
+        </dependency>-->
+    </dependencies>
+
+    <build>
+        <finalName>servlet-remote-naming</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>org.jboss.ejbclientdemo.remotenaming.StandaloneCalculatorClient</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

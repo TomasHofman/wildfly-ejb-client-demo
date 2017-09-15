@@ -1,0 +1,17 @@
+<jboss-ejb-client xmlns:xsi="urn:jboss:ejb-client:1.2" xsi:noNamespaceSchemaLocation="http://www.jboss.org/schema/jbossas/jboss-ejb-client_1_2.xsd">
+    <client-context deployment-node-selector="org.jboss.ejbclientdemo.common.RoundRobinDeploymentNodeSelector">
+        <ejb-receivers>
+            <remoting-ejb-receiver outbound-connection-ref="remote-ejb-connection1"/>
+            <!--<remoting-ejb-receiver outbound-connection-ref="remote-ejb-connection2"/>-->
+        </ejb-receivers>
+
+        <clusters>
+            <cluster name="ejb" security-realm="ejb-security-realm" cluster-node-selector="org.jboss.ejbclientdemo.common.RoundRobinClusterNodeSelector">
+                <connection-creation-options>
+                    <property name="org.xnio.Options.SSL_ENABLED" value="true" />
+                    <property name="org.xnio.Options.SASL_POLICY_NOANONYMOUS" value="true" />
+                </connection-creation-options>
+            </cluster>
+        </clusters>
+    </client-context>
+</jboss-ejb-client>
