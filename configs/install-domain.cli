@@ -1,0 +1,54 @@
+#
+# Creates a domain with two clustered servers where test EJBs are to be
+# deployed and another non-clustered server where client apps are to be
+# deployed.
+#
+
+# first do some cleanup - remove servers, server-groups and profiles that we aren't gonna use
+:stop-servers(blocking=true)
+/host=master/server-config=server-one:remove
+/host=master/server-config=server-two:remove
+/host=master/server-config=server-three:remove
+
+/server-group=main-server-group:remove
+/server-group=other-server-group:remove
+
+/profile=full:remove
+/profile=full-ha:remove
+
+
+batch
+
+# create two server groups - one for EJBs and one for client apps
+
+/server-group=ejb-server-group:add(socket-binding-group=ha-sockets, profile=ha)
+/server-group=client-server-group:add(socket-binding-group=standard-sockets, profile=default)
+
+# create servers
+
+/host=master/server-config=ejb-server1:add(group=ejb-server-group)
+/host=master/server-config=ejb-server2:add(group=ejb-server-group, socket-binding-port-offset=100)
+/host=master/server-config=client-server1:add(group=client-server-group, socket-binding-port-offset=200)
+
+#
+# SSL setup
+#
+
+# create SSL realm
+/host=master/core-service=management/security-realm=CertificateRealm:add()
+/host=master/core-service=management/security-realm=CertificateRealm/server-identity=ssl:add(keystore-path=ssl/server.keystore, keystore-relative-to=jboss.domain.config.dir, keystore-password=123456, alias=jbossalias)
+/host=master/core-service=management/security-realm=CertificateRealm/authentication=truststore:add(keystore-path=ssl/server.truststore, keystore-relative-to=jboss.domain.config.dir, keystore-password=123456)
+
+# set SSL truststore in client group, to allow for our self-signed certificate
+/server-group=client-server-group/system-property=javax.net.ssl.trustStore:add(value=${jboss.domain.config.dir}/ssl/server.truststore, boot-time=true)
+
+# open Undertow SSL listener on EJB server group
+/profile=ha/subsystem=undertow/server=default-server/https-listener=https:add(secure=true, security-realm=CertificateRealm, socket-binding=https)
+
+# change remoting connector to use SSL listener on EJB server group
+/profile=ha/subsystem=remoting/http-connector=http-remoting-connector:write-attribute(name=connector-ref, value=https)
+
+
+run-batch
+
+/host=master:reload

@@ -2,7 +2,7 @@
     <client-context deployment-node-selector="org.jboss.ejbclientdemo.common.RoundRobinDeploymentNodeSelector">
         <ejb-receivers>
             <remoting-ejb-receiver outbound-connection-ref="remote-ejb-connection1"/>
-            <!--<remoting-ejb-receiver outbound-connection-ref="remote-ejb-connection2"/>-->
+            <remoting-ejb-receiver outbound-connection-ref="remote-ejb-connection2"/>
         </ejb-receivers>
 
         <clusters>
