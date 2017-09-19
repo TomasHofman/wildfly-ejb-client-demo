@@ -56,7 +56,7 @@ Start with clean EAP 7.0 install.
 Alternatively, instead of creating EAP domain using CLI script as described in previous section, it is possible to use prepared
 configuration files from `configs/` directory.
 
-Replace step 4) from above section with following (with EAP turned off):
+Replace step 4. from above section with following (with EAP shut down):
 
 1) Copy `configs/domain-https.xml` and `configs/host.xml` into `EAP_HOME/domain/configuration/`.
 2) Run EAP domain:
